@@ -1,0 +1,5 @@
+package org.gp.service;
+
+public class ProductService {
+
+}

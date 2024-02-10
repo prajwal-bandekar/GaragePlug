@@ -1,0 +1,21 @@
+package org.gp.controller;
+
+import org.gp.entity.Product;
+import org.gp.entity.ResponseStructure;
+import org.gp.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ProductController {
+
+	
+	@Autowired
+	private ProductService service;
+	
+	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody Product p){
+		return service.saveProduct(p);
+	}
+}

@@ -1,0 +1,36 @@
+package org.gp.controller;
+
+import org.gp.entity.Product;
+import org.gp.entity.ResponseStructure;
+import org.gp.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ProductController {
+
+	
+	@Autowired
+	private ProductService service;
+	
+	@PostMapping("/product")
+	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody Product p){
+		return service.saveProduct(p);
+	}
+	
+	@PostMapping("/product/{product_id}")
+	public ResponseEntity<ResponseStructure<Product>> updateProduct(@RequestBody Product p, @PathVariable int product_id){
+		return service.updateProduct(p, product_id);
+	}
+	
+	@DeleteMapping("/product/{product_id}")
+	public ResponseEntity<ResponseStructure<String>> deleteProduct(@PathVariable int product_id){
+		return service.deleteProduct(product_id);
+	}
+	
+}

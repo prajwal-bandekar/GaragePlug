@@ -1,0 +1,63 @@
+package org.gp.service;
+
+import java.util.Optional;
+
+import org.gp.dao.ProductDao;
+import org.gp.entity.Product;
+import org.gp.entity.ResponseStructure;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProductService {
+	
+	@Autowired
+	private ProductDao dao;
+	
+	//POST -/product
+		public ResponseEntity<ResponseStructure<Product>> saveProduct(Product p){
+			ResponseStructure<Product> structure = new ResponseStructure<>();
+			structure.setData(dao.saveProduct(p));
+			structure.setMessage("Product Created Succesfully");
+			structure.setStatusCode(HttpStatus.CREATED.value());
+			return new ResponseEntity<ResponseStructure<Product>>(structure, HttpStatus.CREATED);
+		}
+		
+	//PUT - /product/{product_id}
+		public ResponseEntity<ResponseStructure<Product>> updateProduct(Product p, int product_id){
+			ResponseStructure<Product> structure = new ResponseStructure<>();
+			Optional<Product> recProduct = dao.findProduct(product_id);
+			if(recProduct.isPresent()) 
+			{
+				structure.setData(dao.saveProduct(p));
+				structure.setMessage("Product Details Updated Succesfully");
+				structure.setStatusCode(HttpStatus.ACCEPTED.value());
+				return new ResponseEntity<ResponseStructure<Product>>(structure, HttpStatus.ACCEPTED);
+			}
+			
+			throw null;
+		}
+		
+	//DELETE - /product/{product_id}
+		public ResponseEntity<ResponseStructure<String>> deleteProduct(int id){
+			ResponseStructure<String> structure = new ResponseStructure<>();
+			Optional<Product> recProduct = dao.findProduct(id);
+			if(recProduct.isPresent()) {
+				dao.deleteProduct(id);
+				structure.setMessage("Task Executed");
+				structure.setData("Product Deleted Succesfully");		
+				structure.setStatusCode(HttpStatus.OK.value());
+				return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.OK);
+			}
+			
+			//Switch with Exception Handlerlater
+			else {
+				structure.setData(null);
+				structure.setMessage("Product Not Found");
+				structure.setStatusCode(HttpStatus.NOT_FOUND.value());
+				return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
+			}
+		} 
+}

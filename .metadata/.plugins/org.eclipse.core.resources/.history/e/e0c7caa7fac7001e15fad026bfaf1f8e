@@ -1,0 +1,5 @@
+package org.gp.entity;
+
+public class ResponseStructure {
+
+}
