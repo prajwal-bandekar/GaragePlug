@@ -1,0 +1,5 @@
+package org.gp.exceptions;
+
+public class ProductExceptionhandler {
+
+}
