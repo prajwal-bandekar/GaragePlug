@@ -1,0 +1,40 @@
+package org.gp.entity;
+
+import java.util.Arrays;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Promotion {
+	public void applyPromotionSetA(Product product) {
+        if ("UAE".equalsIgnoreCase(product.getOrigin())) {
+            applyDiscount(product, 0.06, "6% discount applied for products from UAE");
+        } else if (product.getRating() == 2) {
+            applyDiscount(product, 0.04, "4% discount applied for products with rating 2");
+        } else if (product.getRating() < 2) {
+            applyDiscount(product, 0.08, "8% discount applied for products with rating below 2");
+        } else if (Arrays.asList("electronics", "furnishing").contains(product.getCategory()) && product.getPrice() >= 500) {
+            applyFlatDiscount(product, 100, "Rs 100 flat discount applied for electronics or furnishing products costing Rs 500 and above");
+        }
+    }
+
+    public void applyPromotionSetB(Product product) {
+        if (product.getInventory() > 20) {
+            applyDiscount(product, 0.12, "12% discount applied for products with inventory more than 20");
+        } else if ("new".equalsIgnoreCase(product.getArrivalStatus())) {
+            applyDiscount(product, 0.07, "7% discount applied for new products");
+        }
+    }
+
+    private void applyDiscount(Product product, double discountPercentage, String discountTag) {
+        double discountedPrice = product.getPrice() * (1 - discountPercentage);
+        product.setPrice(discountedPrice);
+        product.setDiscountTag(discountTag);
+    }
+
+    private void applyFlatDiscount(Product product, double discountAmount, String discountTag) {
+        double discountedPrice = product.getPrice() - discountAmount;
+        product.setPrice(discountedPrice);
+        product.setDiscountTag(discountTag);
+    }
+}

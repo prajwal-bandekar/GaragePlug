@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import org.gp.dao.ProductDao;
 import org.gp.entity.Product;
+import org.gp.entity.Promotion;
 import org.gp.entity.ResponseStructure;
+import org.gp.exceptions.IdNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,10 @@ public class ProductService {
 	@Autowired
 	private ProductDao dao;
 	
+	@Autowired
+    private Promotion promotion;
+
+	
 	//POST -/product
 		public ResponseEntity<ResponseStructure<Product>> saveProduct(Product p){
 			ResponseStructure<Product> structure = new ResponseStructure<>();
@@ -25,20 +31,23 @@ public class ProductService {
 			return new ResponseEntity<ResponseStructure<Product>>(structure, HttpStatus.CREATED);
 		}
 		
+		
 	//PUT - /product/{product_id}
 		public ResponseEntity<ResponseStructure<Product>> updateProduct(Product p, int product_id){
 			ResponseStructure<Product> structure = new ResponseStructure<>();
 			Optional<Product> recProduct = dao.findProduct(product_id);
 			if(recProduct.isPresent()) 
 			{
-				structure.setData(dao.saveProduct(p));
+				p.setProduct_id(product_id);
+				structure.setData(dao.updateProduct(p));
 				structure.setMessage("Product Details Updated Succesfully");
 				structure.setStatusCode(HttpStatus.ACCEPTED.value());
 				return new ResponseEntity<ResponseStructure<Product>>(structure, HttpStatus.ACCEPTED);
 			}
 			
-			throw null;
+			throw new IdNotFoundException();
 		}
+		
 		
 	//DELETE - /product/{product_id}
 		public ResponseEntity<ResponseStructure<String>> deleteProduct(int id){
@@ -52,12 +61,40 @@ public class ProductService {
 				return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.OK);
 			}
 			
-			//Switch with Exception Handler later
-			else {
-				structure.setData(null);
-				structure.setMessage("Product Not Found");
-				structure.setStatusCode(HttpStatus.NOT_FOUND.value());
-				return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.NOT_FOUND);
-			}
+			throw new IdNotFoundException();
 		} 
+		
+		
+	//GET - /product?promotion=Set?
+		public ResponseEntity<ResponseStructure<Product>> getProductByPromotion(String promotionSet, int product_id) {
+	        Optional<Product> optionalProduct = dao.findProduct(product_id);
+	        if (optionalProduct.isPresent()) 
+	        {
+	            Product product = optionalProduct.get();
+	            applyPromotion(promotionSet, product);
+
+	            ResponseStructure<Product> structure = new ResponseStructure<>();
+	            structure.setData(product);
+	            structure.setMessage("Product fetched successfully with promotion applied");
+	            structure.setStatusCode(HttpStatus.OK.value());
+	            return new ResponseEntity<>(structure, HttpStatus.OK);
+	        } else {
+	            // Handle case when product is not found
+	            throw new IdNotFoundException();
+	        }
+	    }
+
+	    private void applyPromotion(String promotionSet, Product product) {
+	        switch (promotionSet) {
+	            case "SetA":
+	                promotion.applyPromotionSetA(product);
+	                break;
+	            case "SetB":
+	                promotion.applyPromotionSetB(product);
+	                break;
+	            // Add more cases for other promotion sets if needed
+	            default:
+	                break;
+	        }
+	    }
 }

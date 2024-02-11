@@ -3,6 +3,7 @@ package org.gp.dao;
 import java.util.Optional;
 
 import org.gp.entity.Product;
+import org.gp.entity.Promotion;
 import org.gp.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,4 +29,5 @@ public class ProductDao {
 	public Optional<Product> findProduct(int id){
 		return repo.findById(id);
 	}
+	
 }

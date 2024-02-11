@@ -1,36 +1,50 @@
 package org.gp.controller;
 
 import org.gp.entity.Product;
+import org.gp.entity.Promotion;
 import org.gp.entity.ResponseStructure;
 import org.gp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/product")
 public class ProductController {
 
 	
 	@Autowired
 	private ProductService service;
 	
-	@PostMapping("/product")
+	@Autowired
+	private Promotion promotion;
+	
+	@PostMapping
 	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody Product p){
 		return service.saveProduct(p);
 	}
 	
-	@PostMapping("/product/{product_id}")
+	@PutMapping("/{product_id}")
 	public ResponseEntity<ResponseStructure<Product>> updateProduct(@RequestBody Product p, @PathVariable int product_id){
 		return service.updateProduct(p, product_id);
 	}
 	
-	@DeleteMapping("/product/{product_id}")
+	@DeleteMapping("/{product_id}")
 	public ResponseEntity<ResponseStructure<String>> deleteProduct(@PathVariable int product_id){
 		return service.deleteProduct(product_id);
 	}
+	
+	@GetMapping
+    public ResponseEntity<ResponseStructure<Product>> getProductWithPromotion(@RequestParam String promotion, @RequestParam int product_id) {
+        return service.getProductByPromotion(promotion, product_id);
+    }
 	
 }
