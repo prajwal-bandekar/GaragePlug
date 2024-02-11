@@ -1,0 +1,90 @@
+package org.gp.entity;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class Promotion {
+
+    public void applyPromotionSetA(Product product) {
+        double maxDiscount = 0.0;
+        Discount discount = new Discount(); // Creating a new Discount object
+        discount.setDiscountTag(""); // Initializing discountTag
+
+        if ("UAE".equalsIgnoreCase(product.getOrigin())) {
+            double discountAmount = product.getPrice() * 0.06; // 6% discount
+            if (discountAmount > maxDiscount) {
+                maxDiscount = discountAmount;
+                discount.setAmount(maxDiscount);
+                discount.setDiscountTag("6% discount for UAE origin");
+            }
+        }
+
+        if (product.getRating() == 2) {
+            double discountAmount = product.getPrice() * 0.04; // 4% discount
+            if (discountAmount > maxDiscount) {
+                maxDiscount = discountAmount;
+                discount.setAmount(maxDiscount);
+                discount.setDiscountTag("4% discount for rating equal to 2");
+            }
+        } else if (product.getRating() < 2) {
+            double discountAmount = product.getPrice() * 0.08; // 8% discount
+            if (discountAmount > maxDiscount) {
+                maxDiscount = discountAmount;
+                discount.setAmount(maxDiscount);
+                discount.setDiscountTag("8% discount for rating below 2");
+            }
+        }
+
+        if ((product.getCategory().equalsIgnoreCase("electronics") || product.getCategory().equalsIgnoreCase("furnishing")) &&
+                product.getPrice() >= 500) {
+            double discountAmount = 100;
+            if (discountAmount > maxDiscount) {
+                maxDiscount = discountAmount;
+                discount.setAmount(maxDiscount);
+                discount.setDiscountTag("Rs 100 flat discount for electronics/furnishing items costing Rs 500 and above");
+            }
+        }
+
+        if (maxDiscount > 0) {
+            product.setPrice(product.getPrice() - maxDiscount);
+            product.setDiscount(discount); // Setting the Discount object
+        } else {
+            if (product.getPrice() > 1000) {
+                double defaultDiscount = product.getPrice() * 0.02; // 2% default discount
+                product.setPrice(defaultDiscount);
+                discount.setAmount(defaultDiscount); // Setting default discount amount
+                discount.setDiscountTag("2% default discount for price exceeding Rs 1000");
+                product.setDiscount(discount); // Setting the Discount object
+            }
+        }
+    }
+
+    public void applyPromotionSetB(Product product) {
+    	
+        double maxDiscount = 0.0;
+        Discount discount = new Discount(); 
+        discount.setDiscountTag(""); 
+
+        if (product.getInventory() > 20) {
+            double discountAmount = product.getPrice() * 0.12; // 12% discount
+            if (discountAmount > maxDiscount) {
+                maxDiscount = discountAmount;
+                discount.setAmount(maxDiscount);
+                discount.setDiscountTag("12% discount for inventory");
+            }
+        }
+
+        if (maxDiscount > 0) {
+            product.setPrice(maxDiscount);
+            product.setDiscount(discount); // Setting the Discount object
+        } else {
+            if (product.getPrice() > 1000) {
+                double defaultDiscount = product.getPrice() * 0.02; // 2% default discount
+                product.setPrice(product.getPrice() - defaultDiscount);
+                discount.setAmount(defaultDiscount); // Setting default discount amount
+                discount.setDiscountTag("2% default discount for price exceeding Rs 1000");
+                product.setDiscount(discount); // Setting the Discount object
+            }
+        }
+    }
+}

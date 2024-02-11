@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -36,5 +37,9 @@ public class Product {
 	@Column(nullable=false)
 	private  String product;
 	
-	private String discount;
+	@Column(nullable=false)
+	private String arrivalStatus;
+	
+	 @Transient
+	 private Discount discount;
 }

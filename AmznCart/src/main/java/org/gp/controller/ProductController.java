@@ -24,8 +24,8 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 	
-	@Autowired
-	private Promotion promotion;
+//	@Autowired
+//	private Promotion promotion;
 	
 	@PostMapping
 	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody Product p){
