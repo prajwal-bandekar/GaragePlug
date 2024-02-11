@@ -37,7 +37,7 @@ public class Product {
 	@Column(nullable=false)
 	private  String product;
 	
-	@Column(nullable=false)
+	@Column
 	private String arrivalStatus;
 	
 	 @Transient

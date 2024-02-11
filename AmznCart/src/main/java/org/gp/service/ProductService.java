@@ -23,7 +23,8 @@ public class ProductService {
 
 	
 	//POST -/product
-		public ResponseEntity<ResponseStructure<Product>> saveProduct(Product p){
+		public ResponseEntity<ResponseStructure<Product>> saveProduct(Product p)
+		{
 			ResponseStructure<Product> structure = new ResponseStructure<>();
 			structure.setData(dao.saveProduct(p));
 			structure.setMessage("Product Created Succesfully");
@@ -33,7 +34,8 @@ public class ProductService {
 		
 		
 	//PUT - /product/{product_id}
-		public ResponseEntity<ResponseStructure<Product>> updateProduct(Product p, int product_id){
+		public ResponseEntity<ResponseStructure<Product>> updateProduct(Product p, int product_id)
+		{
 			ResponseStructure<Product> structure = new ResponseStructure<>();
 			Optional<Product> recProduct = dao.findProduct(product_id);
 			if(recProduct.isPresent()) 
@@ -50,7 +52,8 @@ public class ProductService {
 		
 		
 	//DELETE - /product/{product_id}
-		public ResponseEntity<ResponseStructure<String>> deleteProduct(int id){
+		public ResponseEntity<ResponseStructure<String>> deleteProduct(int id)
+		{
 			ResponseStructure<String> structure = new ResponseStructure<>();
 			Optional<Product> recProduct = dao.findProduct(id);
 			if(recProduct.isPresent()) {
@@ -65,7 +68,7 @@ public class ProductService {
 		} 
 		
 		
-	//GET - /product?promotion=Set?
+	//GET - /product?promotion=?1&product_id=?2
 		public ResponseEntity<ResponseStructure<Product>> getProductByPromotion(String promotionSet, int product_id) {
 	        Optional<Product> optionalProduct = dao.findProduct(product_id);
 	        if (optionalProduct.isPresent()) 
@@ -92,7 +95,7 @@ public class ProductService {
 	            case "SetB":
 	                promotion.applyPromotionSetB(product);
 	                break;
-	            // Add more cases for other promotion sets if needed
+	        
 	            default:
 	                break;
 	        }

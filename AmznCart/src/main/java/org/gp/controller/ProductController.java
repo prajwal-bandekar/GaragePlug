@@ -1,7 +1,6 @@
 package org.gp.controller;
 
 import org.gp.entity.Product;
-import org.gp.entity.Promotion;
 import org.gp.entity.ResponseStructure;
 import org.gp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +23,27 @@ public class ProductController {
 	@Autowired
 	private ProductService service;
 	
-//	@Autowired
-//	private Promotion promotion;
-	
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody Product p){
+	public ResponseEntity<ResponseStructure<Product>> saveProduct(@RequestBody Product p)
+	{
 		return service.saveProduct(p);
 	}
 	
 	@PutMapping("/{product_id}")
-	public ResponseEntity<ResponseStructure<Product>> updateProduct(@RequestBody Product p, @PathVariable int product_id){
+	public ResponseEntity<ResponseStructure<Product>> updateProduct(@RequestBody Product p, @PathVariable int product_id)
+	{
 		return service.updateProduct(p, product_id);
 	}
 	
 	@DeleteMapping("/{product_id}")
-	public ResponseEntity<ResponseStructure<String>> deleteProduct(@PathVariable int product_id){
+	public ResponseEntity<ResponseStructure<String>> deleteProduct(@PathVariable int product_id)
+	{
 		return service.deleteProduct(product_id);
 	}
 	
 	@GetMapping
-    public ResponseEntity<ResponseStructure<Product>> getProductWithPromotion(@RequestParam String promotion, @RequestParam int product_id) {
+    public ResponseEntity<ResponseStructure<Product>> getProductWithPromotion(@RequestParam String promotion, @RequestParam int product_id) 
+	{
         return service.getProductByPromotion(promotion, product_id);
     }
 	
